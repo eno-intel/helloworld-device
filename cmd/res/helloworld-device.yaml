@@ -1,0 +1,38 @@
+name: "HelloWorld-Device"
+manufacturer: "Intel"
+model: "1"
+labels:
+ - "helloworld"
+description: "Example of helloworld-device"
+
+deviceResources:
+    -   
+        name: "helloworld"
+        description: "print Hello World"
+        properties:
+            value:
+                { type: "String", readWrite: "R", defaultValue: "Hello World"}
+            units:
+                { type: "String", readWrite: "R", defaultValue: "" }
+
+resources:
+    -
+        name: "HelloWorld"
+        get:
+            -
+                { operation: "get", object: "helloworld", property: "value", parameter: "HelloWorld" }
+
+commands:
+  -
+    name: "HelloWorld"
+    get:
+        path: "/api/v1/device/{deviceId}/HelloWorld"
+        responses:
+          -
+            code: "200"
+            description: ""
+            expectedValues: ["HelloWorld"]
+          -
+            code: "503"
+            description: "service unavailable"
+            expectedValues: []
