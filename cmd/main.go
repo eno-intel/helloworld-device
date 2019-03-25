@@ -1,7 +1,16 @@
 package main
 
-import "fmt"
+import (
+	"github.com/edgexfoundry/device-sdk-go/pkg/startup"
+	"github.com/eno-intel/helloworld-device/driver"
+)
+
+const (
+	version     string = "1.0.0"
+	serviceName string = "helloworld-device"
+)
 
 func main() {
-	fmt.Println("Main ran")
+	helloWordDriver := driver.HelloWorldDriver{}
+	startup.Bootstrap(serviceName, version, &helloWordDriver)
 }

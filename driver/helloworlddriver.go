@@ -6,6 +6,7 @@ import (
 
 	dsModels "github.com/edgexfoundry/device-sdk-go/pkg/models"
 	logger "github.com/edgexfoundry/go-mod-core-contracts/clients/logging"
+	"github.com/edgexfoundry/go-mod-core-contracts/models"
 )
 
 type HelloWorldDriver struct {
@@ -13,7 +14,7 @@ type HelloWorldDriver struct {
 	asyncCh chan<- *dsModels.AsyncValues
 }
 
-func (hwD *HelloWorldDriver) DisconnectDevice(deviceName string, protocols map[string]map[string]string) error {
+func (hwD *HelloWorldDriver) DisconnectDevice(deviceName string, protocols map[string]models.ProtocolProperties) error {
 	hwD.lc.Info(fmt.Sprintf("HelloWorldDriver.DisconnectDevice: driver is disconnecting from %s", deviceName))
 	return nil
 }
@@ -24,7 +25,7 @@ func (hwD *HelloWorldDriver) Initialize(lc logger.LoggingClient, asyncCh chan<- 
 	return nil
 }
 
-func (hwD *HelloWorldDriver) HandleReadCommands(deviceName string, protocols map[string]map[string]string, reqs []dsModels.CommandRequest) (res []*dsModels.CommandValue, err error) {
+func (hwD *HelloWorldDriver) HandleReadCommands(deviceName string, protocols map[string]models.ProtocolProperties, reqs []dsModels.CommandRequest) (res []*dsModels.CommandValue, err error) {
 	if len(reqs) != 1 {
 		err = fmt.Errorf("HelloWorldDriver.HandleReadCommands; too many command requests; only one supported")
 		return
@@ -32,13 +33,13 @@ func (hwD *HelloWorldDriver) HandleReadCommands(deviceName string, protocols map
 
 	res = make([]*dsModels.CommandValue, 1)
 	now := time.Now().UnixNano() / int64(time.Millisecond)
-	cv := dsModels.NewStringValue(&reqs[0].RO, now, fmt.Sprintf("Hello World from: %s", deviceName))
+	cv := dsModels.NewStringValue(&reqs[0].RO, now, fmt.Sprintf("Helloooooooooooo World from: %s", deviceName))
 
 	res[0] = cv
 	return
 }
 
-func (hwD *HelloWorldDriver) HandleWriteCommands(deviceName string, protocols map[string]map[string]string, reqs []dsModels.CommandRequest, params []*dsModels.CommandValue) error {
+func (hwD *HelloWorldDriver) HandleWriteCommands(deviceName string, protocols map[string]models.ProtocolProperties, reqs []dsModels.CommandRequest, params []*dsModels.CommandValue) error {
 	hwD.lc.Info(fmt.Sprintf("HelloWorldDriver.HandleWriteCommands: not enabled for device %s", deviceName))
 	return nil
 }
